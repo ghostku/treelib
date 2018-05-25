@@ -772,3 +772,14 @@ class Tree(object):
                     self.root = val
             else:
                 setattr(cn, attr, val)
+
+    def merge(self, tree, top=None):
+        if not top:
+            top = self.root
+        tags = {i.tag: i.identifier for i in self.children(top)}
+        for node in tree.children(tree.root):
+            if node.tag not in tags.keys():
+                self.paste(top, tree.subtree(node.identifier))
+            else:
+                self.merge(tree.subtree(node.identifier), tags[node.tag])
+        return self
